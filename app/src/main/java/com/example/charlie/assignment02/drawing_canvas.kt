@@ -3,6 +3,7 @@ package com.example.charlie.assignment02
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import java.util.*
@@ -16,8 +17,8 @@ class drawing_canvas : View {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
-    public var undoStack : Stack<Path> = Stack<Path>()
-    public var redoStack : Stack<Path> = Stack<Path>()
+    public var undoStack : Stack<FingerStroke> = Stack<FingerStroke>()
+    public var redoStack : Stack<FingerStroke> = Stack<FingerStroke>()
 
     var fingerPath : Path = Path()
 
@@ -29,6 +30,7 @@ class drawing_canvas : View {
     var lineColorRed : String = "cc"
     var lineColorGreen : String = "cc"
     var lineColorBlue : String = "cc"
+
 
     var linePaint: Paint = {
         var linePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -65,13 +67,35 @@ class drawing_canvas : View {
             MotionEvent.ACTION_MOVE -> fingerPath.lineTo(X, Y)
             MotionEvent.ACTION_UP -> {
                 fingerPath.lineTo(X, Y)
+                val fingerStroke : FingerStroke = FingerStroke(fingerPath, linePaint)
                 drawCanvas.drawPath(fingerPath, linePaint)
-                undoStack.push(fingerPath)
+                undoStack.push(fingerStroke)
                 fingerPath.reset()
             }
             else -> return false
         }
         invalidate()
         return true
+    }
+
+    fun undoLastTouch() {
+        if (undoStack.empty())
+            return
+        Log.e("TAG", "UNDO")
+        val undo : FingerStroke = undoStack.pop()
+        redoStack.push(undo)
+        val c : Int = undo.fingerPaint.color
+        undo.fingerPaint.color = Color.WHITE
+        drawCanvas.drawPath(undo.fingerPath, undo.fingerPaint)
+        undo.fingerPaint.color = c
+        invalidate()
+    }
+    fun redoLastTouch() {
+        if (redoStack.empty())
+            return
+        val redo : FingerStroke = redoStack.pop()
+        undoStack.push(redo)
+        drawCanvas.drawPath(redo.fingerPath, redo.fingerPaint)
+        invalidate()
     }
 }
