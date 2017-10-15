@@ -5,6 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import java.util.*
 
 /**
  * Created by Charlie on 10/14/2017.
@@ -14,6 +15,9 @@ class drawing_canvas : View {
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
+
+    public var undoStack : Stack<Path> = Stack<Path>()
+    public var redoStack : Stack<Path> = Stack<Path>()
 
     var fingerPath : Path = Path()
 
@@ -62,8 +66,8 @@ class drawing_canvas : View {
             MotionEvent.ACTION_UP -> {
                 fingerPath.lineTo(X, Y)
                 drawCanvas.drawPath(fingerPath, linePaint)
+                undoStack.push(fingerPath)
                 fingerPath.reset()
-                // TODO push to undo stack
             }
             else -> return false
         }
