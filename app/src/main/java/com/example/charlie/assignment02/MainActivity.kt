@@ -27,15 +27,15 @@ class MainActivity : AppCompatActivity() {
     get() {
         val thumbnails : ArrayList<thumbnail_layout> = ArrayList<thumbnail_layout>()
         // TODO: Load thumbnails from disk
-        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher))
-        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher))
-        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher))
-        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher))
-        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher))
-        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher))
-        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher))
-        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher))
-        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher))
+        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher, "title"))
+        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher, "title"))
+        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher, "title"))
+        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher, "title"))
+        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher, "title"))
+        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher, "title"))
+        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher, "title"))
+        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher, "title"))
+        thumbnails.add(thumbnail_layout(R.mipmap.ic_launcher, "title"))
         return thumbnails
     }
 }

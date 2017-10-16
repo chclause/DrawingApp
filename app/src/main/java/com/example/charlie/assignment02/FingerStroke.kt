@@ -2,6 +2,8 @@ package com.example.charlie.assignment02
 
 import android.graphics.Paint
 import android.graphics.Path
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * Created by Charlie on 10/15/2017.

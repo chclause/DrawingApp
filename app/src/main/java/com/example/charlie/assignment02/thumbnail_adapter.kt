@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.TextView
 
 
-class thumbnail_adapter(private val getContext : Context, private val layoutId : Int, private val thumbnailLayout : ArrayList<thumbnail_layout>)
-    : ArrayAdapter<thumbnail_layout>(getContext, layoutId, thumbnailLayout) {
+class thumbnail_adapter(private val getContext : Context, private val layoutId : Int, private val thumbnailLayouts : ArrayList<thumbnail_layout>)
+    : ArrayAdapter<thumbnail_layout>(getContext, layoutId, thumbnailLayouts) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var row = convertView
@@ -20,14 +21,16 @@ class thumbnail_adapter(private val getContext : Context, private val layoutId :
 
             row = inflater!!.inflate(layoutId, parent, false)
             viewHolder.thumbnail = row!!.findViewById(R.id.thumbnail_image)
+            viewHolder.title = row!!.findViewById((R.id.thumbnail_title))
 
             row.setTag(viewHolder)
         } else {
             viewHolder = row.getTag() as ViewHolder
         }
 
-        val tn = thumbnailLayout[position]
+        val tn = thumbnailLayouts[position]
         viewHolder.thumbnail!!.setImageResource(tn.image)
+        viewHolder.title!!.setText(tn.title)
 
         return row
     }
@@ -35,6 +38,7 @@ class thumbnail_adapter(private val getContext : Context, private val layoutId :
 
     class ViewHolder {
         var thumbnail : ImageView? = null
+        var title : TextView? = null
     }
 
 }

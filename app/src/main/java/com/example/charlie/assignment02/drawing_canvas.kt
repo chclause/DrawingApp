@@ -7,6 +7,8 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import java.io.FileInputStream
+import java.io.ObjectInputStream
 import java.util.*
 import kotlin.collections.HashSet
 
@@ -93,12 +95,7 @@ class drawing_canvas : View {
         return true
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration?) {
-        super.onConfigurationChanged(newConfig)
-        drawAllStrokes()
-    }
-
-    private fun drawAllStrokes() {
+    fun drawAllStrokes() {
         if (undoStack.empty())
             return
         for (item in allStrokes) {
