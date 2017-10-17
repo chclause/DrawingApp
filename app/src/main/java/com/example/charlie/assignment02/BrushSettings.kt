@@ -42,9 +42,11 @@ class BrushSettings : View {
         lineColorBlue = blue.toLowerCase()
         try {
             linePaint.color = Color.parseColor("#$lineColorRed$lineColorGreen$lineColorBlue")
+            GlobalBrushSettings.Brush.color = linePaint.color
         }
         catch(e: Exception) {
             linePaint.color = Color.LTGRAY
+            GlobalBrushSettings.Brush.color = Color.LTGRAY
         }
         invalidate()
     }
@@ -54,12 +56,15 @@ class BrushSettings : View {
     fun setJoinType(type: String) {
         if (type == "round") {
             linePaint.strokeJoin = Paint.Join.ROUND
+            GlobalBrushSettings.Brush.strokeJoin = Paint.Join.ROUND
         }
         else if (type == "bevel") {
             linePaint.strokeJoin = Paint.Join.BEVEL
+            GlobalBrushSettings.Brush.strokeJoin = Paint.Join.BEVEL
         }
         else if (type == "miter") {
             linePaint.strokeJoin = Paint.Join.MITER
+            GlobalBrushSettings.Brush.strokeJoin = Paint.Join.MITER
         }
         else {
             return
@@ -71,12 +76,15 @@ class BrushSettings : View {
     fun setCapType(type: String) {
         if (type == "round") {
             linePaint.strokeCap = Paint.Cap.ROUND
+            GlobalBrushSettings.Brush.strokeCap = Paint.Cap.ROUND
         }
         else if (type == "butt") {
             linePaint.strokeCap = Paint.Cap.BUTT
+            GlobalBrushSettings.Brush.strokeCap = Paint.Cap.BUTT
         }
         else if (type == "square") {
             linePaint.strokeCap = Paint.Cap.SQUARE
+            GlobalBrushSettings.Brush.strokeCap = Paint.Cap.SQUARE
         }
         else {
             return
@@ -87,6 +95,7 @@ class BrushSettings : View {
     // Sets the line size
     fun setLineSize(size: Float) {
         linePaint.strokeWidth = size
+        GlobalBrushSettings.Brush.strokeWidth = size
         invalidate()
     }
 

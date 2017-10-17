@@ -3,6 +3,7 @@ package com.example.charlie.assignment02
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.*
+import android.provider.Settings
 import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
@@ -38,18 +39,6 @@ class drawing_canvas : View {
     // To help with sizing and drawing
     lateinit var canvasBitmap : Bitmap
 
-    // Attributes to customize the line color
-    var lineColorRed : String = "cc"
-    var lineColorGreen : String = "cc"
-    var lineColorBlue : String = "cc"
-
-    // The Paint for the current line
-    var linePaint: Paint = {
-        var linePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        linePaint.color = Color.LTGRAY
-        linePaint.strokeWidth = 25.0F
-        linePaint
-    }()
     // The Paint for the background
     var backgroundPaint: Paint = {
         var backgroundPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -68,6 +57,7 @@ class drawing_canvas : View {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas!!.drawBitmap(canvasBitmap, 0.toFloat(), 0.toFloat(), backgroundPaint)
+        drawAllStrokes(allStrokes)
     }
 
     // User touch event.  Sets the current Path to draw and adds it to the undoStack
@@ -83,8 +73,8 @@ class drawing_canvas : View {
             MotionEvent.ACTION_MOVE -> fingerPath.lineTo(X, Y)
             MotionEvent.ACTION_UP -> {
                 fingerPath.lineTo(X, Y)
-                val fingerStroke : FingerStroke = FingerStroke(fingerPath, linePaint)
-                drawCanvas.drawPath(fingerPath, linePaint)
+                val fingerStroke : FingerStroke = FingerStroke(fingerPath, GlobalBrushSettings.Brush)
+                drawCanvas.drawPath(fingerPath, GlobalBrushSettings.Brush)
                 undoStack.push(fingerStroke)
                 allStrokes.add(fingerStroke)
                 fingerPath.reset()
@@ -95,10 +85,11 @@ class drawing_canvas : View {
         return true
     }
 
-    fun drawAllStrokes() {
-        if (undoStack.empty())
-            return
-        for (item in allStrokes) {
+    fun drawAllStrokes(strokes : HashSet<FingerStroke>) {
+        if (GlobalDataset.globalPathData.contains(allStrokes))
+            GlobalDataset.globalPathData.remove(allStrokes)
+        allStrokes = strokes
+        for (item in strokes) {
             drawCanvas.drawPath(item.fingerPath, item.fingerPaint)
         }
         invalidate()
@@ -112,7 +103,7 @@ class drawing_canvas : View {
         redoStack.push(undo)
         allStrokes.remove(undo)
         val c : Int = undo.fingerPaint.color
-        undo.fingerPaint.color = Color.WHITE
+        undo.fingerPaint.color = backgroundPaint.color
         drawCanvas.drawPath(undo.fingerPath, undo.fingerPaint)
         undo.fingerPaint.color = c
         invalidate()

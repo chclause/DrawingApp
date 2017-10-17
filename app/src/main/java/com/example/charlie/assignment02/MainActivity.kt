@@ -1,6 +1,7 @@
 package com.example.charlie.assignment02
 
 import android.content.Intent
+import kotlinx.android.synthetic.main.thumbnail_layout.*
 import kotlinx.android.synthetic.main.activity_main.*
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
