@@ -2,19 +2,32 @@ package com.example.charlie.assignment02
 
 import android.graphics.Paint
 import android.graphics.Path
+import android.os.Environment
 import android.util.Log
 import org.json.JSONObject
+import java.io.File
+import java.io.OutputStream
+import java.io.OutputStreamWriter
 
-/**
- * Created by Charlie on 10/16/2017.
- */
 object GlobalDataset {
+    private const val datasetDirectoryName : String = "FingerStrokeCollection"
+    private const val fingerStrokeExtension : String = ".fingerstrokes"
+
+    private val canReadExternalStorage : Boolean
+        get() = when (Environment.getExternalStorageState()) {
+            Environment.MEDIA_MOUNTED, Environment.MEDIA_MOUNTED_READ_ONLY -> true
+            else -> false
+        }
+    private val canWriteToExternalStorage : Boolean
+        get() = Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
+
     var globalPathData = arrayListOf<HashSet<FingerStroke>>()
     var globalJsonPaths = arrayListOf<FingerStrokeJson>()
 
     fun addASet(strokes : HashSet<FingerStroke>) : Int {
         if (!globalPathData.contains((strokes)))
             globalPathData.add(strokes)
+        saveDataset()
         return globalPathData.indexOf(strokes)
     }
     fun indexOfSet(strokes : HashSet<FingerStroke>) : Int {
@@ -68,5 +81,21 @@ object GlobalDataset {
             return Paint.Cap.BUTT
         else
             return Paint.Cap.SQUARE
+    }
+
+    private fun saveDataset() {
+        if (canWriteToExternalStorage) {
+            val directory = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), datasetDirectoryName)
+            directory.deleteRecursively()
+
+            if (!directory.exists()) {
+                check(directory.mkdirs()) { "External storage was marked as readable, but a directory could not be created there."}
+            }
+            var index: Int = 0
+            for (item in globalJsonPaths) {
+                var file = File(directory.absolutePath + File.separator + index++ + fingerStrokeExtension)
+                file.writeText(item.toJSON())
+            }
+        }
     }
 }

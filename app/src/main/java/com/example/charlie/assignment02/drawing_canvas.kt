@@ -27,6 +27,7 @@ class drawing_canvas : View {
     var redoStack : Stack<FingerStroke> = Stack<FingerStroke>()
     var allStrokes : HashSet<FingerStroke> = HashSet<FingerStroke>()
     var selfJSON : FingerStrokeJson = FingerStrokeJson()
+    var oldJSON : FingerStrokeJson = FingerStrokeJson()
 
     // The current Path that needs to be drawn
     var fingerPath : Path = Path()
@@ -91,6 +92,10 @@ class drawing_canvas : View {
                 GlobalBrushSettings.cap,
                 GlobalBrushSettings.sWidth
                 )
+        if (GlobalDataset.globalJsonPaths.contains(oldJSON))
+            GlobalDataset.globalJsonPaths.remove(oldJSON)
+        GlobalDataset.globalJsonPaths.add(selfJSON)
+        oldJSON = selfJSON
         invalidate()
         return true
     }

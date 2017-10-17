@@ -28,12 +28,13 @@ class FingerStrokeJson {
         strokeWidth = sWidth + "$sWidth"
     }
 
-    fun toJSON() {
+    fun toJSON() : String {
         underLyingJSON.put("lineTo", lineTo)
         underLyingJSON.put("moveTo", moveTo)
         underLyingJSON.put("color", color)
         underLyingJSON.put("strokeJoin", strokeJoin)
         underLyingJSON.put("strokeCap", strokeCap)
         underLyingJSON.put("strokeWidth", strokeWidth)
+        return underLyingJSON.toString()
     }
 }
