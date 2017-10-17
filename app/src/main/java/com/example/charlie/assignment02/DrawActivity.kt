@@ -7,9 +7,6 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_draw.*
-import java.io.FileNotFoundException
-import java.util.Collections.copy
-import javax.microedition.khronos.opengles.GL
 
 class DrawActivity : AppCompatActivity() {
 
@@ -23,6 +20,7 @@ class DrawActivity : AppCompatActivity() {
         setContentView(R.layout.activity_draw)
         current_canvas.drawAllStrokes(strokes)
         current_canvas.refreshDrawableState()
+
         undoButton.setOnClickListener {
             current_canvas.undoLastTouch()
         }

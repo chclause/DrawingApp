@@ -22,13 +22,11 @@ class drawing_canvas : View {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
-    // This is to tell if touches are allowed or if this is display only
-    var displayOnly : Boolean = false
-
     // Collections of FingerStroke objects, which hold a Path and Paint object
     var undoStack : Stack<FingerStroke> = Stack<FingerStroke>()
     var redoStack : Stack<FingerStroke> = Stack<FingerStroke>()
     var allStrokes : HashSet<FingerStroke> = HashSet<FingerStroke>()
+    var selfJSON : FingerStrokeJson = FingerStrokeJson()
 
     // The current Path that needs to be drawn
     var fingerPath : Path = Path()
@@ -69,9 +67,16 @@ class drawing_canvas : View {
         var Y : Float = event.getY()
 
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> fingerPath.moveTo(X, Y)
-            MotionEvent.ACTION_MOVE -> fingerPath.lineTo(X, Y)
+            MotionEvent.ACTION_DOWN -> {
+                selfJSON.addCoordMoveTo(X, Y)
+                fingerPath.moveTo(X, Y)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                selfJSON.addCoordLineTo(X, Y)
+                fingerPath.lineTo(X, Y)
+            }
             MotionEvent.ACTION_UP -> {
+                selfJSON.addCoordLineTo(X, Y)
                 fingerPath.lineTo(X, Y)
                 val fingerStroke : FingerStroke = FingerStroke(fingerPath, GlobalBrushSettings.Brush)
                 drawCanvas.drawPath(fingerPath, GlobalBrushSettings.Brush)
@@ -81,6 +86,11 @@ class drawing_canvas : View {
             }
             else -> return false
         }
+        selfJSON.addBrush(GlobalBrushSettings.color,
+                GlobalBrushSettings.join,
+                GlobalBrushSettings.cap,
+                GlobalBrushSettings.sWidth
+                )
         invalidate()
         return true
     }

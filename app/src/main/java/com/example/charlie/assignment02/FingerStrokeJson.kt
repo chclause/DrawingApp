@@ -7,35 +7,33 @@ import org.json.JSONObject
  * Created by Charlie on 10/15/2017.
  */
 class FingerStrokeJson {
-    var downPathJSON : JSONArray = JSONArray()
-    var movePathJSON : JSONArray = JSONArray()
-    var upPathJSON : JSONArray = JSONArray()
+    var lineTo : String = ""
+    var moveTo: String = ""
+    var color: String = ""
+    var strokeCap : String = ""
+    var strokeJoin : String = ""
+    var strokeWidth : String = ""
     var underLyingJSON : JSONObject = JSONObject()
 
-    fun addCoordDownPath(x : Float, y: Float) {
-        val newCoord : JSONObject = JSONObject()
-        newCoord.put("x", x.toString())
-        newCoord.put("y", y.toString())
-        downPathJSON.put(newCoord)
+    fun addCoordLineTo(x : Float, y : Float) {
+        lineTo = lineTo + "$x,$y,"
     }
-    fun addCoordUpPath(x : Float, y : Float) {
-        val newCoord : JSONObject = JSONObject()
-        newCoord.put("x", x.toString())
-        newCoord.put("y", y.toString())
-        upPathJSON.put(newCoord)
+    fun addCoordMoveTo(x : Float, y : Float) {
+        moveTo = moveTo + "$x,$y,"
     }
-    fun addCoordMovePath(x : Float, y : Float) {
-        val newCoord : JSONObject = JSONObject()
-        newCoord.put("x", x.toString())
-        newCoord.put("y", y.toString())
-        movePathJSON.put(newCoord)
-    }
-    fun toJSON() : String {
-        underLyingJSON.put("moveDownPath", downPathJSON)
-        underLyingJSON.put("moveUpPath", upPathJSON)
-        underLyingJSON.put("movePath", movePathJSON)
-
-        return underLyingJSON.toString()
+    fun addBrush(c: Int, sJoin : String, sCap : String, sWidth : String) {
+        color = color + "$c,"
+        strokeJoin = strokeJoin + "$sJoin,"
+        strokeCap = strokeCap + "$sCap,"
+        strokeWidth = sWidth + "$sWidth"
     }
 
+    fun toJSON() {
+        underLyingJSON.put("lineTo", lineTo)
+        underLyingJSON.put("moveTo", moveTo)
+        underLyingJSON.put("color", color)
+        underLyingJSON.put("strokeJoin", strokeJoin)
+        underLyingJSON.put("strokeCap", strokeCap)
+        underLyingJSON.put("strokeWidth", strokeWidth)
+    }
 }

@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
+import android.provider.Settings
 import android.util.AttributeSet
 import android.view.View
 
@@ -43,10 +44,12 @@ class BrushSettings : View {
         try {
             linePaint.color = Color.parseColor("#$lineColorRed$lineColorGreen$lineColorBlue")
             GlobalBrushSettings.Brush.color = linePaint.color
+            GlobalBrushSettings.color = linePaint.color
         }
         catch(e: Exception) {
             linePaint.color = Color.LTGRAY
             GlobalBrushSettings.Brush.color = Color.LTGRAY
+            GlobalBrushSettings.color = Color.LTGRAY
         }
         invalidate()
     }
@@ -57,14 +60,17 @@ class BrushSettings : View {
         if (type == "round") {
             linePaint.strokeJoin = Paint.Join.ROUND
             GlobalBrushSettings.Brush.strokeJoin = Paint.Join.ROUND
+            GlobalBrushSettings.join = "round"
         }
         else if (type == "bevel") {
             linePaint.strokeJoin = Paint.Join.BEVEL
             GlobalBrushSettings.Brush.strokeJoin = Paint.Join.BEVEL
+            GlobalBrushSettings.join = "bevel"
         }
         else if (type == "miter") {
             linePaint.strokeJoin = Paint.Join.MITER
             GlobalBrushSettings.Brush.strokeJoin = Paint.Join.MITER
+            GlobalBrushSettings.join = "miter"
         }
         else {
             return
@@ -77,14 +83,17 @@ class BrushSettings : View {
         if (type == "round") {
             linePaint.strokeCap = Paint.Cap.ROUND
             GlobalBrushSettings.Brush.strokeCap = Paint.Cap.ROUND
+            GlobalBrushSettings.cap = "round"
         }
         else if (type == "butt") {
             linePaint.strokeCap = Paint.Cap.BUTT
             GlobalBrushSettings.Brush.strokeCap = Paint.Cap.BUTT
+            GlobalBrushSettings.cap = "butt"
         }
         else if (type == "square") {
             linePaint.strokeCap = Paint.Cap.SQUARE
             GlobalBrushSettings.Brush.strokeCap = Paint.Cap.SQUARE
+            GlobalBrushSettings.cap = "square"
         }
         else {
             return
@@ -96,6 +105,7 @@ class BrushSettings : View {
     fun setLineSize(size: Float) {
         linePaint.strokeWidth = size
         GlobalBrushSettings.Brush.strokeWidth = size
+        GlobalBrushSettings.sWidth = size.toString()
         invalidate()
     }
 
